@@ -149,13 +149,10 @@ Tata-Power-Analysis/
 │   ├── districts.csv
 │   ├── roi_bengaluru_districts.csv
 │   └── data_dictionary_Tata_Power.txt
-├── analysis/
-│   └── tata_power_ev_analysis.py    # Validates metrics, exports charts, builds the PDF
 ├── Dashboard Images/                # Excel dashboard screenshots shown in this README
 ├── images/                          # Charts used in this README and the report
 ├── reports/
 │   └── Tata_Power_EV_Insights_Report.pdf
-├── requirements.txt
 └── README.md
 ```
 
