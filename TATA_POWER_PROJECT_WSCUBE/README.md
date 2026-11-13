@@ -156,20 +156,10 @@ Tata-Power-Analysis/
 └── README.md
 ```
 
-## ▶️ How to reproduce
-
-```bash
-git clone https://github.com/mahendta-9928/Tata-Power-Analysis.git
-cd Tata-Power-Analysis
-pip install -r requirements.txt
-python analysis/tata_power_ev_analysis.py
-```
-
-To explore the dashboards, open `TATA_POWER_PROJECT.xlsx` in Microsoft Excel 2016 or later (Windows). The data model needs Power Pivot. Use the slicers on each dashboard to filter.
 
 ## 🧰 Skills demonstrated
 
-`Data Cleaning` · `Data Modelling (Star Schema)` · `Power Query` · `Power Pivot` · `DAX` · `PivotTables & Slicers` · `Dashboard Design` · `KPI Definition` · `Financial Analysis (CAPEX, EBITDA, Payback, ROI)` · `Python / pandas` · `Data Visualisation` · `Business Storytelling`
+`Data Cleaning` · `Data Modelling (Star Schema)` · `Power Query` · `Power Pivot` · `DAX` · `PivotTables & Slicers` · `Dashboard Design` · `KPI Definition` · `Financial Analysis (CAPEX, EBITDA, Payback, ROI)` · `Business Storytelling`
 
 ## ⚠️ Limitations
 
