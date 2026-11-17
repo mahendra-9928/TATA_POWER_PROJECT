@@ -1,6 +1,6 @@
 # ⚡ Tata Power EV Charging Network – Bengaluru Expansion Analysis
 
-**Excel (Power Query · Power Pivot · DAX · PivotTables · Dashboards) **
+**Excel (Power Query · Power Pivot · DAX · PivotTables · Dashboards) + Python (pandas · matplotlib)**
 
 An end-to-end data analysis of Bengaluru's public EV charging network. The project measures how the current network is used, who the customers are, and which of 98 proposed charging-station projects Tata Power should fund first.
 
@@ -44,10 +44,10 @@ customers ──< charging_sessions >── charging_stations >── districts 
 | Step                      | Work                                                                                                                                                                                                                                                                                                                 |
 | ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Data cleaning**         | Reclassified 23 negative-ROI projects from _Medium_ to _Low_ priority. Added `Capitalized_Land_Lease_10yr_Lakh` so the CAPEX formula can be traced (Ind AS 116). Verified `total_cost = kWh × tariff` on all 114k rows. Checked every foreign key. Flagged `plugs_count` (all stations = 6) as a likely placeholder. |
-| **Feature engineering**   | Added a `Battery Band` customer segment (Small / Medium / Large kWh) and Month / Month Index / Year columns from the session timestamp.                                                                                                                                                                              |
+| **Feature engineering**   | Added a `Battery Band` customer segment (Small <25 / Medium 25–40 / Large 40–60 / Premium 60+ kWh) and Month / Month Index / Year columns from the session timestamp.                                                                                                                                                                              |
 | **Data modelling**        | Loaded all 5 tables via Power Query into the Power Pivot data model and set up the relationships.                                                                                                                                                                                                                    |
-| **DAX measures**          | Total Sessions, Total kWh, Total Plugs, Sessions per Plug, Avg kWh per Station/Session, Over- and Under-utilised Stations, Unique Customers, Sessions / Revenue per Customer, Plug Gap, Projected EVs, Existing Stations, Avg CAPEX, Avg Payback (with and without subsidy), Avg 5-yr ROI                            |
-| **Analysis**              | 33 PivotTables with slicers for Month, Income Tier, Charger Type and Priority Tier                                                                                                                                                                                                                                   |
+| **DAX measures**          | Total Sessions, Total kWh, Total Stations, Total Plugs, Sessions per Plug / Station, Avg kWh per Station / Session / Customer, Over- and Under-utilised Stations, Unique Customers, Sessions / Revenue per Customer, Plug Gap, Projected EVs and Plugs, Existing Stations and Plugs, Annual Revenue, Annual EBITDA, Avg CAPEX, Avg Payback (with and without subsidy), Avg 5-yr ROI                            |
+| **Analysis**              | 34 PivotTables with slicers for Month, Income Tier, Charger Type and Priority Tier                                                                                                                                                                                                                                   |
 | **Dashboards**            | 4 interactive dashboards with 21 charts (see below)                                                                                                                                                                                                                                                                  |
 | **Validation and report** | Re-computed every headline figure in Python, generated the charts and wrote the PDF insights report                                                                                                                                                                                                                  |
 
@@ -57,10 +57,12 @@ customers ──< charging_sessions >── charging_stations >── districts 
 | --- | ------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 1   | **Station Utilization & Operational Efficiency** | KPI cards (sessions, energy, revenue, customers, avg kWh and revenue per session), monthly energy vs revenue, monthly sessions, existing stations vs projected EV demand, usage by income tier |
 | 2   | **Business & Usage Overview**                    | Stations, plugs, sessions per station, plugs vs sessions by district, station density, avg kWh per station, load distribution, top and bottom 10 stations by sessions per plug                 |
-| 3   | **Customer & Demand Behavior**                   | Revenue per customer, sessions per customer, share of sessions vs share of revenue by income tier, top 10 car models, sessions by battery band                                                 |
-| 4   | **Financial Performance & Expansion Strategy**   | Avg CAPEX, revenue, EBITDA, payback with and without subsidy, 5-yr ROI by district, payback by charger type, CAPEX breakdown, priority tier mix, plug gap by district                          |
+| 3   | **Customer & Demand Behavior**                   | KPI cards (unique customers, sessions, kWh and revenue per customer), revenue per customer, sessions per customer, share of sessions vs share of revenue by income tier, top 10 car models, sessions by battery band, customers vs revenue per customer by car model                                                 |
+| 4   | **Financial Performance & Expansion Strategy**   | Avg CAPEX, revenue, EBITDA, payback with and without subsidy, 5-yr ROI by district, payback by charger type, CAPEX breakdown, priority tier mix, existing stations vs projected EVs, plug gap by district                          |
 
 ### 🖼️ Dashboard previews
+
+_Previews re-created from the workbook data; slicers (Month, Income Tier, Charger Type, Priority Tier) are interactive in the Excel file._
 
 **Dashboard 1 – Station Utilization & Operational Efficiency**
 
@@ -104,12 +106,12 @@ Projected need is 1,067 plugs and there are 390 today, a **gap of 677**. Jayanag
 ![Plug gap](images/04_plug_gap_by_district.png)
 
 **3. High-income customers are worth 3× more.**  
-High-income customers make **15% of sessions but bring in 31% of revenue** (₹12,979 per customer vs ₹4,109 for Low-Mid). Low-Mid customers make 50% of sessions with small batteries (16.6 kWh per session).
+High-income customers make **15% of sessions but bring in 31% of revenue** (₹12,979 per customer vs ₹4,109 for Low-Mid). Low-Mid customers make 50% of sessions with small batteries (16.6 kWh per session). Premium-car owners (Audi, BMW, Kia EV6, Hyundai Ioniq 5) bring ₹12–14k per customer, against ₹7.5k for the Mahindra XUV400.
 
 ![Income tier](images/03_income_tier_share.png)
 
 **4. Usage peaks in the daytime.**  
-Usage is concentrated between 08:00 and 15:00. The 23:00–05:00 window runs at about 37% of peak, which leaves room for off-peak pricing and fleet charging.
+Usage is concentrated between 08:00 and 15:00. The 23:00–05:00 window runs at about 39% of peak, which leaves room for off-peak pricing and fleet charging.
 
 ![Hourly](images/02_sessions_by_hour.png)
 
@@ -141,7 +143,7 @@ Mid-Range districts average a 67% ROI and High-income districts only 4%, because
 
 ```
 Tata-Power-Analysis/
-├── TATA_POWER_PROJECT.xlsx          # Excel workbook: data model, DAX, 33 pivots, 4 dashboards
+├── TATA_POWER_PROJECT.xlsx          # Excel workbook: data model, DAX, 34 pivots, 4 dashboards
 ├── Tata Power/                      # Raw data
 │   ├── charging_sessions.csv
 │   ├── charging_stations.csv
@@ -156,10 +158,9 @@ Tata-Power-Analysis/
 └── README.md
 ```
 
-
 ## 🧰 Skills demonstrated
 
-`Data Cleaning` · `Data Modelling (Star Schema)` · `Power Query` · `Power Pivot` · `DAX` · `PivotTables & Slicers` · `Dashboard Design` · `KPI Definition` · `Financial Analysis (CAPEX, EBITDA, Payback, ROI)` · `Business Storytelling`
+`Data Cleaning` · `Data Modelling (Star Schema)` · `Power Query` · `Power Pivot` · `DAX` · `PivotTables & Slicers` · `Dashboard Design` · `KPI Definition` · `Financial Analysis (CAPEX, EBITDA, Payback, ROI)` · `Python / pandas` · `Data Visualisation` · `Business Storytelling`
 
 ## ⚠️ Limitations
 
