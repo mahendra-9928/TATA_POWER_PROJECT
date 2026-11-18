@@ -1,6 +1,6 @@
 # ⚡ Tata Power EV Charging Network – Bengaluru Expansion Analysis
 
-**Excel (Power Query · Power Pivot · DAX · PivotTables · Dashboards) **
+**Excel (Power Query · Power Pivot · DAX · PivotTables · Dashboards) + Python (pandas · matplotlib)**
 
 An end-to-end data analysis of Bengaluru's public EV charging network. The project measures how the current network is used, who the customers are, and which of 98 proposed charging-station projects Tata Power should fund first.
 
